@@ -137,6 +137,55 @@ Logical volume "vol_projects" created.
   Block device           253:0
   ```
   
+#### Formating nelwy created logical volumes with ext4 filesystem since it allows us both to increase and reduce the size of each LV (as opposed to xfs that only allows to increase the size)
+
+```
+# mkfs.ext4 /dev/vg00/vol_projects
+# mkfs.ext4 /dev/vg00/vol_backups
+```
+
+#### Resizing Logical Volumes and Extending Volume Groups
+
+```
+[root@ip-172-31-45-192 ~]# lvreduce -L -2.5G -r /dev/mapper/vg00-vol_projects
+fsck from util-linux 2.30.2
+/dev/mapper/vg00-vol_projects: clean, 11/262144 files, 53326/1048576 blocks
+resize2fs 1.42.9 (28-Dec-2013)
+Resizing the filesystem on /dev/mapper/vg00-vol_projects to 393216 (4k) blocks.
+The filesystem on /dev/mapper/vg00-vol_projects is now 393216 blocks long.
+
+  Size of logical volume vg00/vol_projects changed from 4.00 GiB (1024 e
+  
+[root@ip-172-31-45-192 ~]# lvextend -l +100%FREE -r /dev/mapper/vg00-vol_backups
+fsck from util-linux 2.30.2
+/dev/mapper/vg00-vol_backups: clean, 11/104000 files, 15948/415744 blocks
+  Size of logical volume vg00/vol_backups changed from <1.59 GiB (406 extents) to <4.09 GiB (1046 extents).
+  Logical volume vg00/vol_backups successfully resized.
+resize2fs 1.42.9 (28-Dec-2013)
+Resizing the filesystem on /dev/mapper/vg00-vol_backups to 1071104 (4k) blocks.
+The filesystem on /dev/mapper/vg00-vol_backups is now 1071104 blocks long.
+```
+#### -r option is equalvaelnt to --resizefs
+
+#### Mounting Logical Volumes on Boot. To better identify a logical volume we will need to find out what its UUID (a non-changing attribute that uniquely identifies a formatted storage device) is. To do that, use blkid followed by the path to each device:
+
+
+```
+[root@ip-172-31-45-192 /]# blkid /dev/mapper/vg00-vol_backups
+/dev/mapper/vg00-vol_backups: UUID="f8342778-628b-4650-a2cd-ee9301d21c7a" TYPE="ext4"
+[root@ip-172-31-45-192 /]# blkid /dev/mapper/vg00-vol_projects
+/dev/mapper/vg00-vol_projects: UUID="f2224199-f1e8-4316-80c6-3ca0ee6eb015" TYPE="ext4"
+
+Insert the corresponding entries in /etc/fstab. Then :
+
+mount -a
+```
+
+
+
+
+  
+  
   
   
 
