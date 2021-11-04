@@ -167,16 +167,22 @@ The filesystem on /dev/mapper/vg00-vol_backups is now 1071104 blocks long.
 ```
 #### -r option is equalvaelnt to --resizefs
 
-#### Mounting Logical Volumes on Boot. To better identify a logical volume we will need to find out what its UUID (a non-changing attribute that uniquely identifies a formatted storage device) is. To do that, use blkid followed by the path to each device:
+#### Mounting Logical Volumes on Boot. To better identify a logical volume we will need to find out what its UUID ( a non-changing attribute that uniquely identifies a formatted storage device ) is. To do that, use blkid followed by the path to each device:
 
 
 ```
+mkdir /backups
+mkdir /projects
+mount /dev/mapper/vg00-vol_backups  /backups
+mount /dev/mapper/vg00-vol_projects /projects
+
 [root@ip-172-31-45-192 /]# blkid /dev/mapper/vg00-vol_backups
 /dev/mapper/vg00-vol_backups: UUID="f8342778-628b-4650-a2cd-ee9301d21c7a" TYPE="ext4"
 [root@ip-172-31-45-192 /]# blkid /dev/mapper/vg00-vol_projects
 /dev/mapper/vg00-vol_projects: UUID="f2224199-f1e8-4316-80c6-3ca0ee6eb015" TYPE="ext4"
 
 Insert the corresponding entries in /etc/fstab. Then :
+
 
 mount -a
 ```
