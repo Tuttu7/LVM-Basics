@@ -137,7 +137,7 @@ Logical volume "vol_projects" created.
   Block device           253:0
   ```
   
-#### Formating nelwy created logical volumes with ext4 filesystem since it allows us both to increase and reduce the size of each LV (as opposed to xfs that only allows to increase the size)
+#### Formating nelwy created logical volumes with ext4 filesystem since it allows us both to increase and reduce the size of each LV ( as opposed to xfs that only allows to increase the size )
 
 ```
 # mkfs.ext4 /dev/vg00/vol_projects
